@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/vamshik2506/YOUR-REPO-NAME.git'
+                git 'https://github.com/vamshik2506/my-java-project.git'
             }
         }
 
