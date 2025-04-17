@@ -2,58 +2,32 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven3'       // You configured this in Global Tool Config ✅
-        jdk 'jdk11'          // Also configured this ✅
+        maven 'Maven 3'  // Add Maven under Global Tool Configuration
     }
 
     environment {
-        SONARQUBE_SERVER = 'MySonarQube' // (Optional) if you configure SonarQube later
+        SONAR_TOKEN = credentials('sonar-token')  // Jenkins credential ID
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/vamshik2506/my-java-project.git'
+                git 'https://github.com/vamshik2506/my-java-project.git' // replace if different
             }
         }
 
-        stage('Build') {
+        stage('Test') {
             steps {
-                sh 'mvn clean compile'
+                sh 'mvn clean test'
             }
         }
 
-        stage('Unit Test & Coverage') {
+        stage('SonarQube Analysis') {
             steps {
-                sh 'mvn test jacoco:report'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
-                    publishHTML([reportDir: 'target/site/jacoco', reportFiles: 'index.html', reportName: 'JaCoCo Coverage'])
+                withSonarQubeEnv('MySonarQube') {
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=your-project-key -Dsonar.login=$SONAR_TOKEN'
                 }
             }
-        }
-
-        stage('Package') {
-            steps {
-                sh 'mvn package'
-            }
-        }
-
-        stage('Archive Artifacts') {
-            steps {
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-            }
-        }
-    }
-
-    post {
-        success {
-            echo '✅ Build, Test, and Package completed successfully!'
-        }
-        failure {
-            echo '❌ Build failed!'
         }
     }
 }
