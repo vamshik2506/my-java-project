@@ -17,6 +17,8 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <jacoco.version>0.8.7</jacoco.version>
+        <sonar.projectKey>com.example:my-java-project</sonar.projectKey>
+        <sonar.host.url>http://your-sonarqube-server</sonar.host.url> <!-- Replace with your SonarQube URL -->
     </properties>
 
     <dependencies>
@@ -47,6 +49,13 @@
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>${jacoco.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- SonarQube Scanner API (Optional, if needed) -->
+        <dependency>
+            <groupId>org.sonarsource.scanner.api</groupId>
+            <artifactId>sonar-scanner-api</artifactId>
+            <version>2.11.0.1136</version> <!-- Update to the latest version if needed -->
         </dependency>
     </dependencies>
 
@@ -79,6 +88,13 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- SonarQube Maven Plugin -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.1.2184</version> <!-- Update version if needed -->
+            </plugin>
         </plugins>
     </build>
 
@@ -100,4 +116,10 @@
         </plugins>
     </reporting>
 
+    <repositories>
+        <repository>
+            <id>sonarsource</id>
+            <url>https://maven.sonarsource.org</url>
+        </repository>
+    </repositories>
 </project>
