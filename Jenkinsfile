@@ -1,33 +1,63 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven 3'  // Add Maven under Global Tool Configuration
-    }
-
     environment {
-        SONAR_TOKEN = credentials('sonar-token')  // Jenkins credential ID
+        // Set up environment variables for SonarQube and other tools
+        SONARQUBE = 'SonarQube'
+        MAVEN_HOME = '/usr/share/maven' // Change path if different
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/vamshik2506/my-java-project.git' // replace if different
+                checkout scm
             }
         }
 
-        stage('Test') {
+        stage('Install Dependencies') {
             steps {
-                sh 'mvn clean test'
+                script {
+                    // Install Maven if not already installed
+                    sh 'mvn clean install -DskipTests'
+                }
+            }
+        }
+
+        stage('Run Unit Tests') {
+            steps {
+                script {
+                    // Run JUnit tests
+                    sh 'mvn clean test'
+                }
+            }
+        }
+
+        stage('Code Coverage') {
+            steps {
+                script {
+                    // Run JaCoCo for code coverage
+                    sh 'mvn jacoco:report'
+                }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('MySonarQube') {
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=your-project-key -Dsonar.login=$SONAR_TOKEN'
+                script {
+                    // Run SonarQube analysis
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=my-java-project -Dsonar.host.url=http://localhost:9000'
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo "Build and tests passed successfully!"
+        }
+
+        failure {
+            echo "Build failed, please check the logs!"
         }
     }
 }
