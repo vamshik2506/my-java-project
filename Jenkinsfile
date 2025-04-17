@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven3'       // Define this in Jenkins > Global Tools Configuration
-        jdk 'jdk11'          // Define this in Jenkins > Global Tools Configuration
+        maven 'Maven3'       // You configured this in Global Tool Config ✅
+        jdk 'jdk11'          // Also configured this ✅
     }
 
     environment {
-        SONARQUBE_SERVER = 'MySonarQube' // Optional: define SonarQube in Jenkins settings
+        SONARQUBE_SERVER = 'MySonarQube' // (Optional) if you configure SonarQube later
     }
 
     stages {
@@ -34,15 +34,6 @@ pipeline {
                 }
             }
         }
-
-        // Optional: add this if SonarQube is configured
-        // stage('SonarQube Analysis') {
-        //     steps {
-        //         withSonarQubeEnv('MySonarQube') {
-        //             sh 'mvn sonar:sonar'
-        //         }
-        //     }
-        // }
 
         stage('Package') {
             steps {
