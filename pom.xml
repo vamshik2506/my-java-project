@@ -1,125 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<properties>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+</properties>
 
-    <groupId>com.example</groupId>
-    <artifactId>my-java-project</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
-
-    <name>My Java Project</name>
-    <description>My Java project with Jenkins pipeline</description>
-    <url>http://maven.apache.org</url>
-
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <jacoco.version>0.8.7</jacoco.version>
-        <sonar.projectKey>com.example:my-java-project</sonar.projectKey>
-        <sonar.host.url>http://your-sonarqube-server</sonar.host.url> <!-- Replace with your SonarQube URL -->
-    </properties>
-
-    <dependencies>
-        <!-- JUnit 5 Dependencies -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.7.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.7.0</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Surefire Plugin for running tests -->
-        <dependency>
+<build>
+    <plugins>
+        <!-- Surefire Plugin for tests -->
+        <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.22.2</version>
-        </dependency>
+            <version>3.0.0-M5</version>
+        </plugin>
 
-        <!-- Jacoco for Code Coverage -->
-        <dependency>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>${jacoco.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- SonarQube Scanner API (Optional, if needed) -->
-        <dependency>
-            <groupId>org.sonarsource.scanner.api</groupId>
-            <artifactId>sonar-scanner-api</artifactId>
-            <version>2.11.0.1136</version> <!-- Update to the latest version if needed -->
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <!-- Surefire Plugin for running tests -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
-                <configuration>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
-                    <testFailureIgnore>false</testFailureIgnore>
-                </configuration>
-            </plugin>
-
-            <!-- Jacoco Plugin for code coverage -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- SonarQube Maven Plugin -->
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.9.1.2184</version> <!-- Update version if needed -->
-            </plugin>
-        </plugins>
-    </build>
-
-    <reporting>
-        <plugins>
-            <!-- Jacoco Plugin for coverage reports -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.version}</version>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>html</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
-
-    <repositories>
-        <repository>
-            <id>sonarsource</id>
-            <url>https://maven.sonarsource.org</url>
-        </repository>
-    </repositories>
-</project>
+        <!-- SonarQube Plugin -->
+        <plugin>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>3.10.0.2594</version>
+        </plugin>
+    </plugins>
+</build>
