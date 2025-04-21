@@ -19,7 +19,7 @@ public class UserServiceTest {
     public void testGetUserById() {
         UserService userService = new UserService();
         User createdUser = userService.createUser("Jane Doe", "jane.doe@example.com");
-        
+
         User fetchedUser = userService.getUserById(createdUser.getId());
         assertNotNull(fetchedUser);
         assertEquals(createdUser.getId(), fetchedUser.getId());
