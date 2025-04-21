@@ -10,7 +10,7 @@ public class UserService {
     private int idCounter = 1;
 
     // Create a new user
-    public User createUser(String name, String email) {
+    public User addUser(String name, String email) {
         User user = new User(idCounter++, name, email);
         userRepository.put(user.getId(), user);
         return user;
@@ -25,7 +25,7 @@ public class UserService {
     public List<User> getAllUsers() {
         return new ArrayList<>(userRepository.values());
     }
-    
+
     // Get a user by email
     public User getUserByEmail(String email) {
         return userRepository.values().stream()
