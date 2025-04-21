@@ -4,7 +4,6 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                echo '📥 Checking out code from GitHub...'
                 git 'https://github.com/vamshik2506/my-java-project.git'
             }
         }
@@ -12,14 +11,13 @@ pipeline {
         stage('Build & Test') {
             steps {
                 echo '🔧 Building the project and running unit tests...'
-                sh 'mvn -B clean test -Dmaven.test.failure.ignore=false'
-                echo '✅ Tests completed. Check results below.'
+                sh 'mvn -B clean test -Dmaven.test.failure.ignore=false -DtrimStackTrace=false -Dsurefire.useFile=false'
+                echo '✅ Tests completed.'
             }
         }
 
         stage('Publish Test Results') {
             steps {
-                echo '📊 Publishing JUnit test results...'
                 junit '**/target/surefire-reports/*.xml'
             }
         }
@@ -27,16 +25,13 @@ pipeline {
 
     post {
         always {
-            echo '📦 Archiving build artifacts...'
             archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
         }
-
+        failure {
+            echo '❌ Build failed!'
+        }
         success {
             echo '🎉 Build succeeded!'
-        }
-
-        failure {
-            echo '❌ Build failed! Check the logs and test results.'
         }
     }
 }
