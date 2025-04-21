@@ -1,63 +1,50 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven 3'    // Make sure this matches the Maven tool name configured in Jenkins (Manage Jenkins > Global Tool Configuration)
+        jdk 'OpenJDK 17'   // Same here for JDK
+    }
+
     environment {
-        // Set up environment variables for SonarQube and other tools
-        SONARQUBE = 'SonarQube'
-        MAVEN_HOME = '/usr/share/maven' // Change path if different
+        PROJECT_NAME = "my-java-project"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                echo "Cloning repository..."
+                git 'https://github.com/vamshik2506/my-java-project.git'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Compile') {
             steps {
-                script {
-                    // Install Maven if not already installed
-                    sh 'mvn clean install -DskipTests'
-                }
+                echo "Compiling Java code..."
+                sh 'mvn clean compile'
             }
         }
 
-        stage('Run Unit Tests') {
+        stage('Run Tests') {
             steps {
-                script {
-                    // Run JUnit tests
-                    sh 'mvn clean test'
-                }
+                echo "Running JUnit tests..."
+                sh 'mvn test'
             }
         }
 
-        stage('Code Coverage') {
+        stage('Publish Test Reports') {
             steps {
-                script {
-                    // Run JaCoCo for code coverage
-                    sh 'mvn jacoco:report'
-                }
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    // Run SonarQube analysis
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=my-java-project -Dsonar.host.url=http://localhost:9000'
-                }
+                junit 'target/surefire-reports/*.xml'
             }
         }
     }
 
     post {
         success {
-            echo "Build and tests passed successfully!"
+            echo "Pipeline completed successfully for ${PROJECT_NAME}"
         }
-
         failure {
-            echo "Build failed, please check the logs!"
+            echo "Pipeline failed. Please check the logs for ${PROJECT_NAME}"
         }
     }
 }
