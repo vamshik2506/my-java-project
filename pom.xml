@@ -70,6 +70,18 @@
                 </executions>
             </plugin>
 
+            <!-- SonarQube Plugin for code analysis -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.0.2155</version> <!-- Make sure this is the latest version -->
+            </plugin>
+
         </plugins>
     </build>
+
+    <properties>
+        <!-- SonarQube Server URL -->
+        <sonar.host.url>http://localhost:9000</sonar.host.url> <!-- Update with your SonarQube server URL -->
+    </properties>
 </project>
