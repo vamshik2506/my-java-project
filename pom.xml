@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -8,80 +9,79 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>my-java-project</name>
+    <name>My Java Project</name>
     <url>http://maven.apache.org</url>
 
     <dependencies>
-        <!-- JUnit 5 Dependencies -->
+        <!-- JUnit Dependency for Unit Testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.9.3</version> <!-- Updated to latest JUnit 5 version -->
+            <version>5.7.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.9.3</version> <!-- Updated to latest JUnit 5 version -->
+            <version>5.7.2</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- SonarQube Maven Plugin for Code Analysis -->
+        <dependency>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>3.9.1.2184</version>
+            <scope>build</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>17</source> <!-- Set source compatibility to Java 17 -->
-                    <target>17</target> <!-- Set target compatibility to Java 17 -->
-                </configuration>
-            </plugin>
-
-            <!-- Surefire Plugin for running tests -->
+            <!-- Maven Surefire Plugin for Running Tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version> <!-- Updated version for JUnit 5 compatibility -->
+                <version>3.0.0-M5</version>
                 <configuration>
                     <includes>
-                        <include>**/*Test.java</include> <!-- Ensures test classes are picked up -->
+                        <include>**/*Test.java</include>
                     </includes>
-                    <dependenciesToScan>
-                        <dependency>org.junit.jupiter:junit-jupiter-api</dependency>
-                    </dependenciesToScan>
-                    <useSystemClassloader>false</useSystemClassloader> <!-- Ensures proper class loading -->
                 </configuration>
             </plugin>
 
-            <!-- Optional: Add JaCoCo plugin for code coverage reports -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.7</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- SonarQube Plugin for code analysis -->
+            <!-- SonarQube Maven Plugin -->
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.9.0.2155</version> <!-- Make sure this is the latest version -->
+                <version>3.9.1.2184</version>
             </plugin>
-
         </plugins>
     </build>
 
     <properties>
-        <!-- SonarQube Server URL -->
-        <sonar.host.url>http://18.223.206.96:9000</sonar.host.url> <!-- Updated SonarQube server URL -->
+        <!-- Java Version -->
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+
+        <!-- SonarQube Configuration -->
+        <sonar.host.url>http://3.135.188.244:9000</sonar.host.url>
+        <sonar.login>${env.SONARQUBE_TOKEN}</sonar.login>
     </properties>
+
+    <profiles>
+        <!-- Profile for SonarQube Analysis -->
+        <profile>
+            <id>sonar</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonarsource.scanner.maven</groupId>
+                        <artifactId>sonar-maven-plugin</artifactId>
+                        <version>3.9.1.2184</version>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
